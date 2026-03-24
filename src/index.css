@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 195 20% 96%;
+    --foreground: 200 15% 15%;
+
+    --card: 195 15% 94%;
+    --card-foreground: 200 15% 15%;
+
+    --popover: 195 20% 96%;
+    --popover-foreground: 200 15% 15%;
+
+    --primary: 155 45% 42%;
+    --primary-foreground: 155 20% 98%;
+
+    --secondary: 200 10% 35%;
+    --secondary-foreground: 200 10% 95%;
+
+    --muted: 195 10% 88%;
+    --muted-foreground: 200 8% 50%;
+
+    --accent: 155 45% 42%;
+    --accent-foreground: 155 20% 98%;
+
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 195 15% 86%;
+    --input: 195 15% 86%;
+    --ring: 155 45% 42%;
+
+    --radius: 1.5rem;
+
+    --sidebar-background: 195 15% 94%;
+    --sidebar-foreground: 200 10% 30%;
+    --sidebar-primary: 200 10% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 195 10% 92%;
+    --sidebar-accent-foreground: 200 10% 10%;
+    --sidebar-border: 195 12% 88%;
+    --sidebar-ring: 155 45% 42%;
+
+    /* Custom tokens */
+    --heatmap-empty: 195 10% 90%;
+    --heatmap-l1: 155 30% 80%;
+    --heatmap-l2: 155 35% 65%;
+    --heatmap-l3: 155 40% 50%;
+    --heatmap-l4: 155 45% 38%;
+
+    /* Skill/project colors */
+    --skill-1: 155 50% 42%;
+    --skill-2: 215 65% 50%;
+    --skill-3: 335 60% 55%;
+    --skill-4: 28 75% 55%;
+    --skill-5: 270 50% 55%;
+    --skill-6: 185 55% 45%;
+
+    --mastery-start: 155 30% 55%;
+    --mastery-end: 142 70% 45%;
+
+    --heavy-curve: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .dark {
+    --background: 200 15% 8%;
+    --foreground: 195 15% 92%;
+
+    --card: 200 12% 11%;
+    --card-foreground: 195 15% 92%;
+
+    --popover: 200 12% 11%;
+    --popover-foreground: 195 15% 92%;
+
+    --primary: 155 40% 45%;
+    --primary-foreground: 155 20% 98%;
+
+    --secondary: 200 8% 30%;
+    --secondary-foreground: 200 8% 85%;
+
+    --muted: 200 10% 18%;
+    --muted-foreground: 200 8% 55%;
+
+    --accent: 155 40% 45%;
+    --accent-foreground: 155 20% 98%;
+
+    --destructive: 0 50% 40%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 200 10% 18%;
+    --input: 200 10% 18%;
+    --ring: 155 40% 45%;
+
+    --radius: 1.5rem;
+
+    --heatmap-empty: 200 10% 15%;
+    --heatmap-l1: 155 25% 20%;
+    --heatmap-l2: 155 30% 30%;
+    --heatmap-l3: 155 35% 40%;
+    --heatmap-l4: 155 40% 48%;
+
+    --skill-1: 155 45% 45%;
+    --skill-2: 215 60% 55%;
+    --skill-3: 335 55% 58%;
+    --skill-4: 28 70% 58%;
+    --skill-5: 270 45% 58%;
+    --skill-6: 185 50% 48%;
+
+    --mastery-start: 155 25% 35%;
+    --mastery-end: 142 65% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Geist', system-ui, sans-serif;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono-app {
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
