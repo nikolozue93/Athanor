@@ -59,11 +59,26 @@ Unlike traditional trackers, Athanor treats skill development as a multi-dimensi
 
 ### Installation
 1. **Clone the repository:**
+<<<<<<< HEAD
    ```bash
    git clone [https://github.com/nikolozue93/make10khours.git](https://github.com/nikolozue93/make10khours.git)
    cd Athanor
    npm install
    npm run dev
+=======
+   git clone https://github.com/nikolozue93/Anathor.git
+
+2. **Enter the project directory:**
+   cd Anathor
+
+3. **Install dependencies:**
+   npm install
+
+4. **Run the development server:**
+   npm run dev
+
+5. **Build for production:**
+>>>>>>> 0dab6921b6e7de0a2bf6ddc78fc36ecd2e2a30c0
    npm run build
 
 ## 📜 Future Roadmap
@@ -73,5 +88,13 @@ Unlike traditional trackers, Athanor treats skill development as a multi-dimensi
     Kanban Task Association: Linking specific practice sessions to project-specific tasks.
 
     Manual Backups: Feature to export habit data as a secure .json file.
+<<<<<<< HEAD
 
 Project by Nikoloz Beridze (nikolozue93) | The long road to mastery.
+=======
+    
+## 🛠️ Build Process
+Athanor was developed using an **AI-augmented rapid prototyping workflow**. This approach allowed for high-velocity iteration on complex data visualizations while ensuring the underlying logic—specifically the mastery projection formulas and local-first storage architecture—remained robust and developer-controlled.
+
+Project by Nikoloz Beridze (nikolozue93) | The long road to mastery.
+>>>>>>> 0dab6921b6e7de0a2bf6ddc78fc36ecd2e2a30c0
