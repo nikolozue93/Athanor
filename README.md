@@ -71,19 +71,7 @@ Unlike traditional trackers, Athanor treats skill development as a multi-dimensi
    npm run dev
 
 5. **Build for production:**
-
-   git clone https://github.com/nikolozue93/Anathor.git
-
-2. **Enter the project directory:**
-   cd Anathor
-
-3. **Install dependencies:**
-   npm install
-
-4. **Run the development server:**
-   npm run dev
-
-5. **Build for production:**
+    npm run build
 
 ## 📜 Future Roadmap
 
