@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Skill } from "@/lib/types";
-import { getSkillColor } from "@/lib/skillColors";
+import { resolveSkillColor } from "@/lib/skillColors";
 import { formatDuration } from "@/components/Heatmap";
 import { Badge } from "@/components/ui/badge";
 
@@ -54,7 +54,7 @@ export function ActivityLog({ skills, days = 7 }: ActivityLogProps) {
           daySkills.push({
             name: skill.name,
             icon: skill.icon,
-            color: getSkillColor(skillIndex.get(skill.id) || 0),
+            color: resolveSkillColor(skill, skillIndex.get(skill.id) || 0),
             entries,
             totalMinutes: entries.reduce((s, e) => s + e.duration, 0),
           });

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useApp } from "@/lib/context";
-import { getSkillColor } from "@/lib/skillColors";
+import { resolveSkillColor } from "@/lib/skillColors";
 import { Plus, X, CheckCircle2, Circle } from "lucide-react";
 
 interface TaskManagerProps {
@@ -14,7 +14,7 @@ export function TaskManager({ skillId, skillIndex }: TaskManagerProps) {
 
   const skill = getSkill(skillId);
   const tasks = skill?.tasks || [];
-  const skillColor = getSkillColor(skillIndex);
+  const skillColor = resolveSkillColor(skill, skillIndex);
 
   function handleAdd() {
     if (!newName.trim()) return;

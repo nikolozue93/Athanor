@@ -8,6 +8,7 @@ import { MasteryProjection } from "@/components/insights/MasteryProjection";
 import { MilestoneProgress } from "@/components/insights/MilestoneProgress";
 import { ActivityLog } from "@/components/insights/ActivityLog";
 import { AnalyticsHeader } from "@/components/insights/AnalyticsHeader";
+import { SessionIndicator } from "@/components/SessionIndicator";
 import { motion } from "framer-motion";
 import { ArrowLeft, X } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -35,12 +36,15 @@ export default function StatsPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="px-6 md:px-12 pt-8 pb-4 max-w-5xl mx-auto">
-        <button
-          onClick={() => navigate("/")}
-          className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 text-sm"
-        >
-          <ArrowLeft size={16} /> Back
-        </button>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => navigate("/")}
+            className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 text-sm"
+          >
+            <ArrowLeft size={16} /> Back
+          </button>
+          <SessionIndicator />
+        </div>
       </header>
 
       <div className="px-6 md:px-12 py-8 max-w-5xl mx-auto">

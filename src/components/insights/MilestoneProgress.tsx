@@ -1,6 +1,6 @@
 import { Skill } from "@/lib/types";
 import { getTotalHours } from "@/lib/data";
-import { getSkillColor } from "@/lib/skillColors";
+import { resolveSkillColor } from "@/lib/skillColors";
 import { motion } from "framer-motion";
 
 interface MilestoneProgressProps {
@@ -40,7 +40,7 @@ export function MilestoneProgress({ skills, goal = 10000 }: MilestoneProgressPro
                   className="flex-1 h-3 rounded-sm"
                   style={{
                     backgroundColor: i < filledBlocks
-                      ? getSkillColor(idx)
+                      ? resolveSkillColor(skill, idx)
                       : "hsl(var(--muted))",
                     opacity: i < filledBlocks ? 1 : 0.4,
                   }}

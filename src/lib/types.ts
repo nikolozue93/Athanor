@@ -20,6 +20,7 @@ export interface Skill {
   id: string;
   name: string;
   icon: string; // emoji
+  color?: string;
   logs: TimeLog[];
   tasks: Task[];
   customTiers?: SkillTiers;

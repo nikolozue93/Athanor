@@ -3,6 +3,7 @@ import { useApp } from "@/lib/context";
 import { getTotalHours } from "@/lib/data";
 import { SkillCard } from "@/components/SkillCard";
 import { AddSkillModal } from "@/components/AddSkillModal";
+import { SessionIndicator } from "@/components/SessionIndicator";
 import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -22,6 +23,13 @@ const Index = () => {
           <p className="text-muted-foreground text-sm mt-1">The long road to mastery.</p>
         </div>
         <div className="flex items-center gap-3">
+          <SessionIndicator />
+          <Link
+            to="/focus"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+          >
+            Focus
+          </Link>
           <Link
             to="/stats"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2"

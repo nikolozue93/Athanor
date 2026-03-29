@@ -5,21 +5,28 @@ import { getTotalHours, getProgress, getAverageDailyHours, getEstimatedCompletio
 import { ProgressRing } from "@/components/ProgressRing";
 import { LogModal } from "@/components/LogModal";
 import { TaskManager } from "@/components/TaskManager";
+import { SessionIndicator } from "@/components/SessionIndicator";
 import { motion } from "framer-motion";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
-import { getSkillColor } from "@/lib/skillColors";
+import { ArrowLeft, Pencil, Play, Plus, Save, Trash2, X } from "lucide-react";
+import { resolveSkillColor } from "@/lib/skillColors";
 
 export default function SkillDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { getSkill, deleteSkill, deleteLog, getSkillIndex } = useApp();
+  const { getSkill, deleteSkill, updateLog, deleteLog, getSkillIndex } = useApp();
   const [logOpen, setLogOpen] = useState(false);
+
+  const [editingLogId, setEditingLogId] = useState<string | null>(null);
+  const [editDate, setEditDate] = useState("");
+  const [editDuration, setEditDuration] = useState(0);
+  const [editTaskId, setEditTaskId] = useState<string>("");
+  const [editNote, setEditNote] = useState("");
 
   const skill = getSkill(id || "");
   if (!skill) return <div className="p-12 text-center text-muted-foreground">Skill not found.</div>;
 
   const skillIndex = getSkillIndex(skill.id);
-  const skillColor = getSkillColor(skillIndex);
+  const skillColor = resolveSkillColor(skill, skillIndex);
 
   const hours = getTotalHours(skill);
   const progress = getProgress(skill);
@@ -28,6 +35,34 @@ export default function SkillDetail() {
   const remaining = Math.max(0, 10000 - hours);
 
   const tasks = skill.tasks || [];
+  function startEdit(logId: string) {
+    const target = skill.logs.find((log) => log.id === logId);
+    if (!target) return;
+    setEditingLogId(logId);
+    setEditDate(target.date);
+    setEditDuration(target.duration);
+    setEditTaskId(target.taskId || "");
+    setEditNote(target.note || "");
+  }
+
+  function cancelEdit() {
+    setEditingLogId(null);
+    setEditDate("");
+    setEditDuration(0);
+    setEditTaskId("");
+    setEditNote("");
+  }
+
+  function saveEdit() {
+    if (!editingLogId || editDuration <= 0) return;
+    updateLog(skill.id, editingLogId, {
+      date: editDate,
+      duration: editDuration,
+      taskId: editTaskId || undefined,
+      note: editNote.trim() || undefined,
+    });
+    cancelEdit();
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,6 +75,13 @@ export default function SkillDetail() {
           <ArrowLeft size={16} /> Back
         </button>
         <div className="flex gap-2">
+          <SessionIndicator />
+          <button
+            onClick={() => navigate("/focus")}
+            className="flex items-center gap-2 border border-border rounded-inner px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all"
+          >
+            <Play size={14} /> Focus
+          </button>
           <button
             onClick={() => setLogOpen(true)}
             className="flex items-center gap-2 text-primary-foreground rounded-inner px-4 py-2 text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98]"
@@ -115,37 +157,101 @@ export default function SkillDetail() {
           <div className="space-y-1">
             {skill.logs.slice(0, 30).map((log) => {
               const taskName = tasks.find((t) => t.id === log.taskId)?.name;
+              const isEditing = editingLogId === log.id;
               return (
                 <div
                   key={log.id}
                   className="flex items-center justify-between py-3 px-4 rounded-inner hover:bg-muted/50 transition-colors group"
                 >
-                  <div className="flex items-center gap-6">
-                    <span className="text-sm font-mono text-muted-foreground w-24 tabular-nums">
-                      {new Date(log.date + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                    </span>
-                    <span className="text-sm font-mono tabular-nums">
-                      {Math.floor(log.duration / 60) > 0 && `${Math.floor(log.duration / 60)}h `}
-                      {log.duration % 60}m
-                    </span>
-                    {taskName && (
-                      <span
-                        className="text-xs px-2 py-0.5 rounded-full font-medium text-primary-foreground"
-                        style={{ backgroundColor: skillColor }}
-                      >
-                        {taskName}
-                      </span>
-                    )}
-                    {log.note && (
-                      <span className="text-sm text-muted-foreground truncate max-w-[200px]">{log.note}</span>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => deleteLog(skill.id, log.id)}
-                    className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all"
-                  >
-                    <Trash2 size={14} />
-                  </button>
+                  {isEditing ? (
+                    <div className="w-full flex flex-col gap-3">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+                        <input
+                          type="date"
+                          value={editDate}
+                          onChange={(e) => setEditDate(e.target.value)}
+                          className="bg-background border border-border rounded-inner px-3 py-2 text-sm"
+                        />
+                        <input
+                          type="number"
+                          min={1}
+                          value={editDuration}
+                          onChange={(e) => setEditDuration(Math.max(1, Number(e.target.value) || 1))}
+                          className="bg-background border border-border rounded-inner px-3 py-2 text-sm"
+                          placeholder="Minutes"
+                        />
+                        <select
+                          value={editTaskId}
+                          onChange={(e) => setEditTaskId(e.target.value)}
+                          className="bg-background border border-border rounded-inner px-3 py-2 text-sm"
+                        >
+                          <option value="">No task</option>
+                          {tasks.map((task) => (
+                            <option key={task.id} value={task.id}>{task.name}</option>
+                          ))}
+                        </select>
+                        <input
+                          type="text"
+                          value={editNote}
+                          onChange={(e) => setEditNote(e.target.value)}
+                          className="bg-background border border-border rounded-inner px-3 py-2 text-sm"
+                          placeholder="Reflection"
+                        />
+                      </div>
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          onClick={cancelEdit}
+                          className="flex items-center gap-1.5 border border-border rounded-inner px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+                        >
+                          <X size={13} /> Cancel
+                        </button>
+                        <button
+                          onClick={saveEdit}
+                          className="flex items-center gap-1.5 text-primary-foreground rounded-inner px-3 py-1.5 text-xs"
+                          style={{ backgroundColor: skillColor }}
+                        >
+                          <Save size={13} /> Save
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-6">
+                        <span className="text-sm font-mono text-muted-foreground w-24 tabular-nums">
+                          {new Date(log.date + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        </span>
+                        <span className="text-sm font-mono tabular-nums">
+                          {Math.floor(log.duration / 60) > 0 && `${Math.floor(log.duration / 60)}h `}
+                          {log.duration % 60}m
+                        </span>
+                        {taskName && (
+                          <span
+                            className="text-xs px-2 py-0.5 rounded-full font-medium text-primary-foreground"
+                            style={{ backgroundColor: skillColor }}
+                          >
+                            {taskName}
+                          </span>
+                        )}
+                        {log.note && (
+                          <span className="text-sm text-muted-foreground truncate max-w-[200px]">{log.note}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                        <button
+                          onClick={() => startEdit(log.id)}
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                        <button
+                          onClick={() => deleteLog(skill.id, log.id)}
+                          className="text-muted-foreground hover:text-destructive"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               );
             })}
@@ -153,7 +259,13 @@ export default function SkillDetail() {
         )}
       </div>
 
-      <LogModal skillId={skill.id} skillName={skill.name} skillIndex={skillIndex} open={logOpen} onClose={() => setLogOpen(false)} />
+      <LogModal
+        skillId={skill.id}
+        skillName={skill.name}
+        skillIndex={skillIndex}
+        open={logOpen}
+        onClose={() => setLogOpen(false)}
+      />
     </div>
   );
 }

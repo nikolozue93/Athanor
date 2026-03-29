@@ -2,8 +2,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useApp } from "@/lib/context";
 import { X } from "lucide-react";
+import { SKILL_COLOR_OPTIONS } from "@/lib/skillColors";
 
-const ICONS = ["🎹", "✏️", "💻", "📝", "🎸", "📷", "🎨", "🏋️", "🧘", "📚", "🎯", "🔬"];
+const ICONS = [
+  "🎯", "💻", "🎹", "🎸", "🎻", "🥁", "🎤", "📝", "✍️", "📚", "📷", "🎨", "🎬", "🧠", "🔬", "🧪", "🧮", "⚙️", "🏋️", "🏃", "🧘", "🥊", "♟️", "🧑‍🍳", "🪴", "🗣️", "🧵", "🧰", "🛰️", "🧭",
+];
 
 interface AddSkillModalProps {
   open: boolean;
@@ -14,12 +17,14 @@ export function AddSkillModal({ open, onClose }: AddSkillModalProps) {
   const { addSkill } = useApp();
   const [name, setName] = useState("");
   const [icon, setIcon] = useState("🎯");
+  const [color, setColor] = useState(SKILL_COLOR_OPTIONS[0]);
 
   function handleSubmit() {
     if (!name.trim()) return;
-    addSkill(name.trim(), icon);
+    addSkill(name.trim(), icon, color);
     setName("");
     setIcon("🎯");
+    setColor(SKILL_COLOR_OPTIONS[0]);
     onClose();
   }
 
@@ -39,9 +44,9 @@ export function AddSkillModal({ open, onClose }: AddSkillModalProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-0 left-0 right-0 md:bottom-auto md:top-1/2 md:left-1/2 md:right-auto md:-translate-x-1/2 md:-translate-y-1/2 z-50 w-full md:max-w-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6"
           >
-            <div className="bg-card border border-border rounded-t-3xl md:rounded-3xl p-8">
+            <div className="w-full max-w-md bg-card border border-border rounded-3xl p-6 md:p-8 max-h-[calc(100vh-1.5rem)] md:max-h-[90vh] overflow-y-auto overscroll-contain">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="font-display text-xl font-semibold">New skill</h2>
                 <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors p-1">
@@ -63,6 +68,23 @@ export function AddSkillModal({ open, onClose }: AddSkillModalProps) {
                     >
                       {i}
                     </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="text-sm text-muted-foreground block mb-3">Color</label>
+                <div className="flex flex-wrap gap-2">
+                  {SKILL_COLOR_OPTIONS.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setColor(option)}
+                      className={`w-8 h-8 rounded-full border-2 transition-all ${
+                        color === option ? "border-foreground scale-105" : "border-transparent hover:scale-105"
+                      }`}
+                      style={{ backgroundColor: option }}
+                      aria-label={`Choose color ${option}`}
+                    />
                   ))}
                 </div>
               </div>

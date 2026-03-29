@@ -4,9 +4,10 @@ import { loadData, saveData, generateId } from "@/lib/data";
 
 interface AppContextType {
   data: AppData;
-  addSkill: (name: string, icon: string) => void;
+  addSkill: (name: string, icon: string, color?: string) => void;
   deleteSkill: (id: string) => void;
   addLog: (skillId: string, log: Omit<TimeLog, "id">) => void;
+  updateLog: (skillId: string, logId: string, updates: Omit<TimeLog, "id">) => void;
   deleteLog: (skillId: string, logId: string) => void;
   getSkill: (id: string) => Skill | undefined;
   addTask: (skillId: string, name: string) => void;
@@ -24,11 +25,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     saveData(data);
   }, [data]);
 
-  const addSkill = useCallback((name: string, icon: string) => {
+  const addSkill = useCallback((name: string, icon: string, color?: string) => {
     setData((prev) => ({
       skills: [
         ...prev.skills,
-        { id: generateId(), name, icon, logs: [], tasks: [], createdAt: new Date().toISOString() },
+        { id: generateId(), name, icon, color, logs: [], tasks: [], createdAt: new Date().toISOString() },
       ],
     }));
   }, []);
@@ -44,6 +45,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           ? { ...s, logs: [{ ...log, id: generateId() }, ...s.logs].sort((a, b) => b.date.localeCompare(a.date)) }
           : s
       ),
+    }));
+  }, []);
+
+  const updateLog = useCallback((skillId: string, logId: string, updates: Omit<TimeLog, "id">) => {
+    setData((prev) => ({
+      skills: prev.skills.map((s) => {
+        if (s.id !== skillId) return s;
+        const updatedLogs = s.logs
+          .map((l) => (l.id === logId ? { ...updates, id: logId } : l))
+          .sort((a, b) => b.date.localeCompare(a.date));
+        return { ...s, logs: updatedLogs };
+      }),
     }));
   }, []);
 
@@ -96,7 +109,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AppContext.Provider value={{ data, addSkill, deleteSkill, addLog, deleteLog, getSkill, addTask, toggleTask, deleteTask, getSkillIndex }}>
+    <AppContext.Provider value={{ data, addSkill, deleteSkill, addLog, updateLog, deleteLog, getSkill, addTask, toggleTask, deleteTask, getSkillIndex }}>
       {children}
     </AppContext.Provider>
   );
