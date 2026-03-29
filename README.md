@@ -59,7 +59,6 @@ Unlike traditional trackers, Athanor treats skill development as a multi-dimensi
 
 ### Installation
 1. **Clone the repository:**
-<<<<<<< HEAD
     git clone https://github.com/nikolozue93/Anathor.git
 
 2. **Enter the project directory:**
@@ -72,7 +71,7 @@ Unlike traditional trackers, Athanor treats skill development as a multi-dimensi
    npm run dev
 
 5. **Build for production:**
-=======
+
    git clone https://github.com/nikolozue93/Anathor.git
 
 2. **Enter the project directory:**
@@ -85,8 +84,6 @@ Unlike traditional trackers, Athanor treats skill development as a multi-dimensi
    npm run dev
 
 5. **Build for production:**
->>>>>>> 0dab6921b6e7de0a2bf6ddc78fc36ecd2e2a30c0
-   npm run build
 
 ## 📜 Future Roadmap
 
